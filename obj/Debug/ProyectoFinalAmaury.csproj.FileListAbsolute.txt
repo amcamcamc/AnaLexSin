@@ -1,0 +1,15 @@
+D:\Documentos\Escuela\TercerSemestre\TeoriaComputacion\ProyectoFinal\ProyectoFinalAmaury\bin\Debug\ProyectoFinalAmaury.exe.config
+D:\Documentos\Escuela\TercerSemestre\TeoriaComputacion\ProyectoFinal\ProyectoFinalAmaury\bin\Debug\ProyectoFinalAmaury.exe
+D:\Documentos\Escuela\TercerSemestre\TeoriaComputacion\ProyectoFinal\ProyectoFinalAmaury\bin\Debug\ProyectoFinalAmaury.pdb
+D:\Documentos\Escuela\TercerSemestre\TeoriaComputacion\ProyectoFinal\ProyectoFinalAmaury\obj\Debug\ProyectoFinalAmaury.csprojAssemblyReference.cache
+D:\Documentos\Escuela\TercerSemestre\TeoriaComputacion\ProyectoFinal\ProyectoFinalAmaury\obj\Debug\App.g.cs
+D:\Documentos\Escuela\TercerSemestre\TeoriaComputacion\ProyectoFinal\ProyectoFinalAmaury\obj\Debug\ProyectoFinalAmaury_MarkupCompile.cache
+D:\Documentos\Escuela\TercerSemestre\TeoriaComputacion\ProyectoFinal\ProyectoFinalAmaury\obj\Debug\ProyectoFinalAmaury_MarkupCompile.lref
+D:\Documentos\Escuela\TercerSemestre\TeoriaComputacion\ProyectoFinal\ProyectoFinalAmaury\obj\Debug\ProyectoFinalAmaury.g.resources
+D:\Documentos\Escuela\TercerSemestre\TeoriaComputacion\ProyectoFinal\ProyectoFinalAmaury\obj\Debug\ProyectoFinalAmaury.Properties.Resources.resources
+D:\Documentos\Escuela\TercerSemestre\TeoriaComputacion\ProyectoFinal\ProyectoFinalAmaury\obj\Debug\ProyectoFinalAmaury.csproj.GenerateResource.cache
+D:\Documentos\Escuela\TercerSemestre\TeoriaComputacion\ProyectoFinal\ProyectoFinalAmaury\obj\Debug\ProyectoFinalAmaury.csproj.CoreCompileInputs.cache
+D:\Documentos\Escuela\TercerSemestre\TeoriaComputacion\ProyectoFinal\ProyectoFinalAmaury\obj\Debug\ProyectoFinalAmaury.exe
+D:\Documentos\Escuela\TercerSemestre\TeoriaComputacion\ProyectoFinal\ProyectoFinalAmaury\obj\Debug\ProyectoFinalAmaury.pdb
+D:\Documentos\Escuela\TercerSemestre\TeoriaComputacion\ProyectoFinal\ProyectoFinalAmaury\obj\Debug\MenuPrincipal.g.cs
+D:\Documentos\Escuela\TercerSemestre\TeoriaComputacion\ProyectoFinal\ProyectoFinalAmaury\obj\Debug\MenuPrincipal.baml

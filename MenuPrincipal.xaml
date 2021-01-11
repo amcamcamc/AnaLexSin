@@ -1,0 +1,26 @@
+﻿<Window x:Class="ProyectoFinalAmaury.MenuPrincipal"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ProyectoFinalAmaury"
+        mc:Ignorable="d"
+        Title="ANALISIS LEXICO SINTACTICO" Height="600" Width="933.598" ResizeMode="NoResize">
+    <Grid>
+        <Canvas x:Name="CanvasPrincipal" HorizontalAlignment="Left" Height="571" VerticalAlignment="Top" Width="928" Background="#FF555555">
+            <Button Click="ImportarArchivo" x:Name="ImportarBoton" Content="IMPORTAR CODIGO" Canvas.Left="427" Canvas.Top="53" Width="478" FontWeight="Bold" Height="39"/>
+            <TextBox x:Name="CajaLexico" x:FieldModifier="public" Height="190" Canvas.Left="427" TextWrapping="Wrap" Text="ANALEX" Canvas.Top="97" Width="478" ScrollViewer.CanContentScroll="True" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" AcceptsReturn="True" Background="Black" Foreground="White" IsReadOnly="True"/>
+            <TextBox x:Name="CajaSintactico" x:FieldModifier="public" Height="190" Canvas.Left="427" TextWrapping="Wrap" Text="ANASIN" Canvas.Top="359" Width="478" ScrollViewer.CanContentScroll="True" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" AcceptsReturn="True" Background="Black" Foreground="White" IsReadOnly="True"/>
+            <ScrollViewer x:Name="ScrollCajaCodigo" Height="539" Canvas.Left="48" Canvas.Top="10" Width="363" ScrollChanged="ScrollCambiado">
+                <TextBox x:Name="CajaCodigo" Height="Auto" TextWrapping="Wrap" Text="" Width="Auto" AcceptsReturn="True" AcceptsTab="True" Background="Black" Foreground="White" BorderBrush="{x:Null}" TextChanged="ActualizarNumeroLineas" IsReadOnly="True"/>
+            </ScrollViewer>
+            <ScrollViewer x:Name="ScrollLineador" Height="539" Canvas.Left="10" Canvas.Top="10" Width="38" VerticalScrollBarVisibility="Hidden" ScrollChanged="ScrollCambiado">
+                <TextBox x:Name="Lineador" Height="Auto" TextWrapping="Wrap" Text="" Width="Auto" AcceptsReturn="True" Background="#FF1D1D1D" Foreground="White" TextAlignment="Center" BorderBrush="{x:Null}" IsReadOnly="True"/>
+            </ScrollViewer>
+            <Button Click="AnalizarSintaxis" x:Name="ANALISIS_SINTACTICO_BOTON" IsEnabled="False" Content="ANALIZAR SINTAXIS" FontWeight="Bold" Height="43" Canvas.Left="765" Canvas.Top="301" Width="140"/>
+            <Button Click="AnalizarLexico" x:Name="ANALISIS_LEXICO_BOTON" IsEnabled="False" Content="ANALIZAR LEXICO" FontWeight="Bold" Canvas.Left="427" Canvas.Top="301" Height="43" Width="140"/>
+            <Label x:Name="Por" Content="Hecho por Amaury Morales Cerecedo para la asignatura Teoria de la Computacion" Canvas.Left="427" Width="478" Height="43" Canvas.Top="10" Foreground="White" FontWeight="Bold" FontStyle="Italic"/>
+        </Canvas>
+
+    </Grid>
+</Window>
