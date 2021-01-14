@@ -55,6 +55,11 @@ namespace ProyectoFinalAmaury
         List<int> ignorarTokens = new List<int>();
         List<int> tokensAbiertos_repeticiones = new List<int>();
         List<int> tokensAbiertos_condicionales = new List<int>();
+        int finreps = 0;
+        int finsis = 0;
+        int sinos = 0;
+        int entonceses = 0;
+        int vececes = 0;
 
         bool sintaxisValido = true;
 
@@ -143,6 +148,9 @@ namespace ProyectoFinalAmaury
                     case "SI":
                         valido = Regla_Condicional(lineaParse);
                         break;
+                    case "ENTONCES":
+                        valido = Regla_CondicionalInicio(lineaParse);
+                        break;
                     case "SINO":
                         valido = Regla_CondicionalAlternativa(lineaParse);
                         break;
@@ -151,6 +159,9 @@ namespace ProyectoFinalAmaury
                         break;
                     case "REPITE":
                         valido = Regla_Repeticion(lineaParse);
+                        break;
+                    case "VECES":
+                        valido = Regla_RepeticionVeces(lineaParse);
                         break;
                     case "FINREP":
                         valido = Regla_FinRepeticion(lineaParse);
@@ -335,7 +346,7 @@ namespace ProyectoFinalAmaury
             { ErrorSintactico("ELEMENTO FALTANTE EN LA COMPARACION", elemLineas[lineaParse]); return false; }
 
             //Cuarto: Verificar si el simbolo siguiente es un ENTONCES, ya que solo se puede comparar en una condicional
-            if (IdentificarComando(parseResultado[lineaParse + 3]) != TipoComando.PalabraReservada && parseResultado[lineaParse + 3] == "ENTONCES")
+            if (IdentificarComando(parseResultado[lineaParse + 3]) != TipoComando.PalabraReservada || parseResultado[lineaParse + 3] != "ENTONCES")
             { ErrorSintactico("\"ENTONCES\" FALTANTE EN CONDICIONAL", elemLineas[lineaParse]); return false; }
 
             return true;
@@ -355,14 +366,13 @@ namespace ProyectoFinalAmaury
             { ErrorSintactico("ELEMENTO FALTANTE EN CICLO (IDENTIFICADOR DE VECES)", elemLineas[lineaParse]); return false; }
 
             //Tercero: Verificar si la siguiente palabra escrita corresponde a el simbolo "VECES"
-            if (parseResultado[lineaParse + 2] != "VECES")
+            if (IdentificarComando(parseResultado[lineaParse + 2]) != TipoComando.PalabraReservada || parseResultado[lineaParse + 2] != "VECES")
             { ErrorSintactico("PALABRA \"VECES\" FALTANTE EN CICLO", elemLineas[lineaParse]); return false; }
 
             //Tercero: Buscar Recursivamente comandos si es que existen. Para esto vamos a dejar nuestro token en una lista de
             //espera para que las demas sentencias puedan ser verificadas. Si se llega al FINPROG sin haber acabado nuestro ciclo, se lanza un error.
             tokensAbiertos_repeticiones.Add(lineaParse);
             ignorarTokens.Add(lineaParse + 1);
-            ignorarTokens.Add(lineaParse + 2);
 
             return true;
         }
@@ -372,12 +382,27 @@ namespace ProyectoFinalAmaury
             //No hay forma de saber cual repeticion es la que se esta cerrando, asi que la unica forma es
             //quitando la ultima repeticion abierta de la lista esperando que el usuario cierre todas para que no de error.
 
-            if (tokensAbiertos_repeticiones.Count >= 1) //la unica forma de saber si el final es correcto
+            finreps++;
+            if (tokensAbiertos_repeticiones.Count >= finreps) //creo que es la unica forma de saber si el final es correcto
             {
                 tokensAbiertos_repeticiones.RemoveAt(tokensAbiertos_repeticiones.Count - 1);
+                finreps--;
+                if (vececes > 0) { vececes--; } //Aqui se cierran los vecess para que solo pueda haber 1 por repeticion.
                 return true;
             }
-            return false;
+            else
+            { ErrorSintactico("\"FINREP\" SIN REPETIR PERTENECIENTE", elemLineas[lineaParse]); return false; }
+        }
+
+        bool Regla_RepeticionVeces(int lineaParse)
+        {
+            //Hay que verificar si el VECES no esta de mas.
+
+            vececes++;
+            if (tokensAbiertos_repeticiones.Count >= vececes) //se podria verificar la estructura, pero no es necesario.
+            { return true; }
+            else
+            { ErrorSintactico("\"VECES\" SIN REPETIR PERTENECIENTE", elemLineas[lineaParse]); return false; }
         }
 
         bool Regla_Condicional(int lineaParse)
@@ -396,7 +421,7 @@ namespace ProyectoFinalAmaury
             { ErrorSintactico("ESTRUCTURA DE COMPARACION ERRONEA EN CONDICIONAL", elemLineas[lineaParse]); return false; }
 
             //Tercero: Verificar si lo que sigue de la comparacion es un ENTONCES
-            if (IdentificarComando(parseResultado[lineaParse + 4]) != TipoComando.PalabraReservada && parseResultado[lineaParse + 4] == "ENTONCES")
+            if (IdentificarComando(parseResultado[lineaParse + 4]) != TipoComando.PalabraReservada || parseResultado[lineaParse + 4] != "ENTONCES")
             { ErrorSintactico("\"ENTONCES\" FALTANTE EN CONDICIONAL", elemLineas[lineaParse]); return false; }
 
             //Cuarto: Buscar Recursivamente comandos si es que existen. Para esto vamos a dejar nuestro token en una lista de
@@ -407,35 +432,51 @@ namespace ProyectoFinalAmaury
             ignorarTokens.Add(lineaParse + 1);
             ignorarTokens.Add(lineaParse + 2);
             ignorarTokens.Add(lineaParse + 3);
-            ignorarTokens.Add(lineaParse + 4);
 
             return true;
         }
 
         bool Regla_CondicionalAlternativa(int lineaParse)
         {
-            if (tokensAbiertos_condicionales.Count >= 1) //la unica forma de saber si el sino es correcto
-            {
-                return true;
-            }
+            //Aqui pense en hacer lo mismo para el SINO, pero en realidad, si se piensa bien, no es necesario verificar que exista
+            //porque verificando que exista tambien quiere decir que tenemos que verificar que el SI inicial exista y que el FINSI exista
+            //como ambas son recursivas, entonces no hay manera de saber exactamente si se encuentra en medio de estas.
+            //Nos podriamos saltar verificar si es correcta esta palabra en la gramatica, pero decidi poner aun asi un chequeo para ver si no esta extra.
+
+            sinos++;
+            if (tokensAbiertos_condicionales.Count >= sinos) //creo que es la unica forma de saber si el sino es correcto
+            { return true; }
+            else
             { ErrorSintactico("\"SINO\" SIN CONDICIONAL PERTENECIENTE", elemLineas[lineaParse]); return false; }
+        }
+
+        bool Regla_CondicionalInicio(int lineaParse)
+        {
+            //Hay que verificar si el ENTONCES no esta de mas, al igual que el SINO
+
+            entonceses++;
+            if (tokensAbiertos_condicionales.Count >= entonceses) //se podria verificar la estructura, pero no es necesario.
+            { return true; }
+            else
+            { ErrorSintactico("\"ENTONCES\" SIN CONDICIONAL PERTENECIENTE", elemLineas[lineaParse]); return false; }
         }
 
         bool Regla_FinCondicional(int lineaParse)
         {
             //No hay forma de saber cual condicion es la que se esta cerrando, asi que la unica forma es
             //quitando la ultima condicion abierta de la lista esperando que el usuario cierre todas para que no de error.
-
-            //Aqui pense en hacer lo mismo para el SINO, pero en realidad, si se piensa bien, no es necesario verificar que exista
-            //porque verificando que exista tambien quiere decir que tenemos que verificar que el SI inicial exista y que el FINSI exista
-            //como ambas son recursivas, entonces no hay manera de saber exactamente si se encuentra en medio de estas.
-
-            if (tokensAbiertos_condicionales.Count >= 1) //la unica forma de saber si el final es correcto
+            
+            finsis++;
+            if (tokensAbiertos_condicionales.Count >= finsis) //creo que es la unica forma de saber si el final es correcto
             {
                 tokensAbiertos_condicionales.RemoveAt(tokensAbiertos_condicionales.Count - 1);
+                finsis--;
+                if (sinos > 0) { sinos--; } //Aqui se cierran los sinos para que solo pueda haber 1 por condicional.
+                if (entonceses > 0) { entonceses--; } //Aqui se cierran los entonces para que solo pueda haber 1 por condicional.
                 return true;
             }
-            return false;
+            else
+            { ErrorSintactico("\"FINSI\" SIN CONDICIONAL PERTENECIENTE", elemLineas[lineaParse]); return false; }
         }
 
         bool EsElemento(string parse)
@@ -453,6 +494,9 @@ namespace ProyectoFinalAmaury
             else
             { Logger.LogSintactico("[ ERROR DE COMPILACION: " + razon +" ]"); }
             Logger.LogSintactico("[====================]");
+
+            //Console.WriteLine("CONDICIONALES: "+tokensAbiertos_condicionales.Count +" FINSIS: "+ finsis +" SINOS: "+sinos+" ENTONCECES: " + entonceses);
+            //Console.WriteLine("REPETICIONES: " + tokensAbiertos_repeticiones.Count + " FINREPS: " + finreps+" VECECES: " + vececes);
         }
 
         public void ResetearValores()
@@ -474,6 +518,11 @@ namespace ProyectoFinalAmaury
             ignorarTokens.Clear();
             tokensAbiertos_repeticiones.Clear();
             tokensAbiertos_condicionales.Clear();
+            finreps = 0;
+            finsis = 0;
+            sinos = 0;
+            entonceses = 0;
+            vececes = 0;
 
             sintaxisValido = true;
         }
